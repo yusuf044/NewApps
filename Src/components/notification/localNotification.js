@@ -1,5 +1,6 @@
-import notifee, { AndroidImportance, AndroidStyle } from '@notifee/react-native';
+import notifee, { IOSNotificationCategory, AndroidStyle } from '@notifee/react-native';
 import  {Platform} from 'react-native';
+
 
 
 class LocalNotificationService {
@@ -9,7 +10,7 @@ class LocalNotificationService {
   }
 
   createChannel = () =>{
-  notifee.requestPermission();
+  
         const channelId =  notifee.createChannel({
             id: 'message-reply',
             name: 'Default Channel',
@@ -18,25 +19,25 @@ class LocalNotificationService {
   }
 
 
-  // configureNotification = () =>{
-  //   let config = {
-  //     onRegister: function (token) {},
-  //     onNotification: function (notification) {
-  //         if (notification.userInteraction) {
-  //           notificationOpen(notification)
-  //         }
-  //       },
-  //       permissions: {
-  //         alert: true,
-  //         badge: true,
-  //         sound: true,
-  //       },
-  //       popInitialNotification: false,
-  //       requestPermissions: true,
-  //   }
-
-  //   PushNotification.configure(config);
-  // }
+  configureNotification =async (notificationType: string ) =>{
+    notifee.requestPermission();
+    let categoryType: IOSNotificationCategory = { id: notificationType };
+        switch (notificationType) {
+            case ETechNotifications.CONFIRMATION_BUTTON_AVAILABLE:
+                categoryType.actions = [{ id: notificationType, title: 'hug!' }];
+                break;
+                case ETechNotifications.CONFIRMATION_BUTTON_AVAILABLE:
+                  categoryType.actions = [{ id: notificationType, title: 'kiss!' }];
+                  break;
+            default:
+                return;
+        }
+        try {
+            await notifee.setNotificationCategories([categoryType]);
+        } catch (error: any) {
+            throw new Error(error);
+        }
+  }
 
   // unRegister = () => {
   //   PushNotification.unregister()
