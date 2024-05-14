@@ -1,14 +1,13 @@
 import messaging from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
 
-import { notificationOpen } from './notificationAction';
 import { localNotificationService } from './localNotification';
 
 class FCMService {
 
-    register = () => {
+    register = (notificationCallBack = async(message) => {},notificationPressHandler=(notification)=>{}) => {
         this.checkPermission()
-        this.createNotificationListeners()
+        this.createNotificationListeners(notificationCallBack,notificationPressHandler)
 
         localNotificationService.configure();
 
@@ -71,12 +70,12 @@ class FCMService {
             })
     }
 
-    createNotificationListeners = () => {
+    createNotificationListeners = (notificationCallBack,notificationPressHandler) => {
         //when the application is running but in background
         messaging()
             .onNotificationOpenedApp(remoteMessage => {
                 if (remoteMessage) {
-                    notificationOpen(remoteMessage)
+                    notificationPressHandler(remoteMessage)
                 }
             });
 
@@ -85,20 +84,20 @@ class FCMService {
             .getInitialNotification()
             .then(remoteMessage => {
                 if (remoteMessage) {
-                    notificationOpen(remoteMessage)
+                    notificationPressHandler(remoteMessage)
                 }
             });
 
         //forgrounnd state messages
         this.messageListener = messaging().onMessage(async remoteMessage => {
             if (remoteMessage) {
-                localNotificationService.showlocalNotification(remoteMessage)
+                notificationCallBack(remoteMessage)
             }
         });
 
         messaging().setBackgroundMessageHandler(async remoteMessage => {
             if (remoteMessage) {
-                // this.onNotification(remoteMessage,false);
+                notificationPressHandler(remoteMessage);
             }
         });
 
