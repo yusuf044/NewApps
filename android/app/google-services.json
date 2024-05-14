@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "575070492689",
+    "project_id": "mylatestfirbase",
+    "storage_bucket": "mylatestfirbase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575070492689:android:d19f4f42e1e0e2aa40b9b0",
+        "android_client_info": {
+          "package_name": "com.newapps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv662zgX4-g4_HZuxg5Qr4Ll4Quu3MNh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
