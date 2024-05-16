@@ -63,6 +63,8 @@ export const useNotificationService = () => {
             await notifee.setNotificationCategories([categoryType]);
         } catch (error: any) {
             throw new Error(error);
+
+
         }
     };
 
@@ -126,7 +128,6 @@ export const useNotificationService = () => {
     };
 
     const handleEvent = async (detail: EventDetail) => {
-        console.log(detail, '------>>>>>');
         if (detail.pressAction?.id === ETechNotifications.NOTIFICATION_TYPE_HUG) {
             console.log('User pressed the "confirmation_button_available" action.<=======================');
         }
