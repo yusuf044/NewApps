@@ -10,7 +10,7 @@ export enum ETechNotifications {
     NOTIFICATION_TYPE_GOOD_VIBE = 'good_vibe',
 }
 
-const useNotificationService = () => {
+export const useNotificationService = () => {
     const hasPermission = async () => {
         try {
             const settings: NotificationSettings = await notifee.getNotificationSettings();
@@ -25,8 +25,9 @@ const useNotificationService = () => {
         try {
             const settings: NotificationSettings = await notifee.requestPermission();
             return settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED;
-        } catch (e: any) {
-            throw new Error(e);
+        } catch (error) {
+            console.log(error);
+
         }
     };
 
@@ -34,8 +35,9 @@ const useNotificationService = () => {
         try {
             await setNotificationCategories(message.notification?.title as string);
             await showNotification(message);
-        } catch (error: any) {
-            throw new Error(error);
+        } catch (error) {
+            console.log(error);
+
         }
     };
 
@@ -43,7 +45,7 @@ const useNotificationService = () => {
         let categoryType: IOSNotificationCategory = { id: notificationType };
         switch (notificationType) {
             case ETechNotifications.NOTIFICATION_TYPE_MESSAGE:
-                categoryType.actions = [{ id: notificationType, title: 'Reply',input:true }];
+                categoryType.actions = [{ id: notificationType, title: 'Reply', input: true }];
                 break;
             case ETechNotifications.NOTIFICATION_TYPE_GOOD_VIBE:
                 categoryType.actions = [{ id: notificationType, title: 'Send Back!' }];
@@ -83,16 +85,16 @@ const useNotificationService = () => {
                 android: buildAndroidNotification(message.data?.type as string, channelId, message),
                 ios: buildIOSNotification(message.data?.type as string),
             });
-        } catch (error: any) {
+        } catch (error) {
             throw new Error(error);
         }
     };
 
     const buildAndroidNotification = (notificationType: string | ETechNotifications, channelId: string, message: any) => {
-        let actions:any = []
+        let actions: any = []
         switch (notificationType) {
             case ETechNotifications.NOTIFICATION_TYPE_MESSAGE:
-                actions = [{ pressAction: { id: notificationType }, title: 'Reply',input:true }];
+                actions = [{ pressAction: { id: notificationType }, title: 'Reply', input: true }];
                 break;
             case ETechNotifications.NOTIFICATION_TYPE_GOOD_VIBE:
                 actions = [{ pressAction: { id: notificationType }, title: 'Send Back!' }];
@@ -106,7 +108,7 @@ const useNotificationService = () => {
         }
         return {
             channelId,
-            style: { type: AndroidStyle.BIGTEXT as any, text: message.notification?.body as string },
+            style: { type: AndroidStyle.BIGTEXT as any, text: message.data.title as string },
             actions,
         };
     };
@@ -124,8 +126,7 @@ const useNotificationService = () => {
     };
 
     const handleEvent = async (detail: EventDetail) => {
-        console.log(detail,'------>>>>>');
-        
+        console.log(detail, '------>>>>>');
         if (detail.pressAction?.id === ETechNotifications.NOTIFICATION_TYPE_HUG) {
             console.log('User pressed the "confirmation_button_available" action.<=======================');
         }
@@ -150,28 +151,9 @@ const NotificationService: React.FC = () => {
         handleEvent
     } = useNotificationService();
 
-    const getFcmToken = () => {
-        return new Promise(res => {
-            messaging().getToken()
-                .then(fcmToken => {
-                    if (fcmToken) {
-                        console.log('[FCM TOKEN] => ', fcmToken)
-                        res(fcmToken)
-                    } else {
-                        console.log("[FCMService] User Does not have a device token")
-                    }
-                }).catch(error => {
-                    // SimpleToaster('Please check your network connection.')
-                    console.log("[FCMService] getToken rejected", error);
-                })
-        })
-    }
-
-
     useEffect(() => {
         // Example of how you could use the service
         const checkPermission = async () => {
-            await getFcmToken()
             const permission = await hasPermission();
             if (!permission) {
                 await requestPermission();
@@ -181,8 +163,7 @@ const NotificationService: React.FC = () => {
         checkPermission();
 
         // setup for Firebase messaging
-        fcmService.register(onMessageReceived,handleEvent)
-
+        fcmService.register(onMessageReceived, handleEvent)
         // Clean up the subscription
         return () => {
             fcmService.unRegister()

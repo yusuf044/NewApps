@@ -5,7 +5,7 @@ const App = () => {
 
   return (
     <View>
-      <NotificationService/>
+      <NotificationService />
       <Button title='Message Reply' />
       <Button title='Kiss Back!' />
       <Button title='Hug Back!' />
