@@ -1,21 +1,16 @@
-import React, { Children, useCallback, useMemo, useRef, useState } from 'react';
-
-import {
-  ScrollView,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Button,
-  Text,
-  Alert,
-  TextInput,
-  SafeAreaView,
-} from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { useTheme } from '../../components/themes';
+import React, { useCallback, useState } from 'react';
 import notifee, { AndroidStyle } from '@notifee/react-native';
-import { Spacer } from '../../components';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {
+  Alert,
+  Button,
+  SafeAreaView,
+  Text,
+  TextInput,
+  View
+} from 'react-native';
+import { useTheme } from '../../components/themes';
+import { Header } from '../../components';
 
 type Props = {
   navigation: NativeStackNavigationProp;
@@ -84,46 +79,8 @@ const HomePageScene = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView style={{ flex: 1, }}>
-      <Text style={{ fontSize: 50, textAlign: "center", fontStyle: "italic", fontWeight: "900", color: "red" }}>MY APP</Text>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          backgroundColor: theme === 'light' ? '#FFF' : '#000', paddingHorizontal: 14
-        }}>
-        <Spacer size={6} />
-        <View
-          style={{
-            backgroundColor: '#FFF',
-            width: '100%',
-            borderRadius: 20,
-            paddingHorizontal: 10, elevation: 8, borderTopColor: "#cccc", borderTopWidth: 5
-          }}>
-          <TextInput placeholder="Phone/Email" />
-        </View>
-        {isError && <Text style={{ fontSize: 12, color: "red", marginLeft: 8 }}>Wrong Way</Text>}
-        <Spacer size={10} />
-        <View
-          style={{
-            backgroundColor: '#FFF',
-            width: '100%',
-            borderRadius: 20,
-            paddingHorizontal: 10, elevation: 8, borderTopColor: "#cccc", borderTopWidth: 5
-          }}>
-          <TextInput placeholder="Password" />
-        </View>
-        {isError && <Text style={{ fontSize: 12, color: "red", marginLeft: 8 }}>Wrong Way</Text>}
-        <Spacer size={3} />
-        <Text style={{ textAlign: 'left', marginLeft: 8 }}>Forgot Password</Text>
-        <Button title='Token Screen' onPress={() => navigation.navigate("Splash")} />
-      </View>
-      <View style={{ borderTopColor: "#000", borderTopWidth: 5, }}>
-        <Button color={"red"}
-          title="Display Notification"
-          onPress={() => onDisplayNotification()}
-        />
-
-      </View>
+      <Header />
+      <Text style={{ fontSize: 33, color: "red" }}>Wel Come TO Home page</Text>
     </SafeAreaView>
   );
 };
